@@ -29,6 +29,7 @@ public class RequestAsyncProcessServiceImpl implements RequestAsyncProcessServic
      * @return
      */
     public ArrayBlockingQueue<Request> getRoutingQueue(Integer productId) {
+        //获取当前内存队列的大小
         RequestQueue requestQueue = RequestQueue.getInstance();
 
         //先获取productId的hash值

@@ -60,6 +60,7 @@ public class Application {
      * 注册监听器
      * @return
      */
+    @SuppressWarnings({"rawtypes","unchecked"})
 	@Bean
     public ServletListenerRegistrationBean servletListenerRegistrationBean(){
         ServletListenerRegistrationBean servletListenerRegistrationBean = new ServletListenerRegistrationBean();
