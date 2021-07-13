@@ -28,4 +28,15 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
         String key = "product:inventory:"+productInventory.getProductId();
         redisDAO.delete(key);
     }
+
+    @Override
+    public ProductInventory findProductInventory(Integer productId) {
+        return productInventoryMapper.findProductInventroy(productId);
+    }
+
+    @Override
+    public void setProductInventoryCache(ProductInventory productInventory) {
+        String key = "product:inventory:"+productInventory.getProductId();
+        redisDAO.set(key,String.valueOf(productInventory.getInventoryCnt()));
+    }
 }
