@@ -31,4 +31,9 @@ public class ProductInventoryCacheRefreshRequest implements Request{
         //将最新的商品库存数量刷新到redis缓存中去
         productInventoryService.setProductInventoryCache(productInventory);
     }
+
+    @Override
+    public Integer getProductId() {
+        return productId;
+    }
 }
