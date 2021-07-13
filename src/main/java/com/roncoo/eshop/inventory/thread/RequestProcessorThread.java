@@ -8,11 +8,11 @@ import java.util.concurrent.Callable;
 /**
  * 执行请求的工作线程
  */
-public class WorkerThread implements Callable<Boolean> {
+public class RequestProcessorThread implements Callable<Boolean> {
 
     private ArrayBlockingQueue<Request> queue;
 
-    public WorkerThread(ArrayBlockingQueue<Request> queue){
+    public RequestProcessorThread(ArrayBlockingQueue<Request> queue){
         this.queue = queue;
     }
 

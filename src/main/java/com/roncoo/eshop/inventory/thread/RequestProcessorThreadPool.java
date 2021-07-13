@@ -1,6 +1,7 @@
 package com.roncoo.eshop.inventory.thread;
 
 import com.roncoo.eshop.inventory.request.Request;
+import com.roncoo.eshop.inventory.request.RequestQueue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,18 +16,20 @@ public class RequestProcessorThreadPool {
 
     /**
      * 实际项目中，设置线程池大小以及监控的内存队列大小，需要写到外部的配置文件
-     *
-     * 创建线程池 内存队列
+     *创建线程池
      */
     private ExecutorService threadPool = Executors.newFixedThreadPool(10);
-    private List<ArrayBlockingQueue<Request>> queues = new ArrayList<ArrayBlockingQueue<Request>>();
 
     public RequestProcessorThreadPool(){
+        //内存队列
+        RequestQueue requestQueue = RequestQueue.getInstance();
         for (int i = 0; i < 10; i++) {
+            //阻塞队列
             ArrayBlockingQueue<Request> queue = new ArrayBlockingQueue<Request>(100);
-            queues.add(queue);
-
-            threadPool.submit(new WorkerThread(queue));
+            //将阻塞队列加入内存队列
+            requestQueue.addQueue(queue);
+            //线程池执行线程
+            threadPool.submit(new RequestProcessorThread(queue));
         }
     }
 

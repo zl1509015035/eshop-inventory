@@ -1,18 +1,15 @@
 package com.roncoo.eshop.inventory.listener;
 
-import ch.qos.logback.core.net.server.Client;
-import ch.qos.logback.core.net.server.ServerListener;
+import com.roncoo.eshop.inventory.thread.RequestProcessorThreadPool;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.io.IOException;
 
 public class InitListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-
-
-
+        //初始化工作线程吃和内存队列
+        RequestProcessorThreadPool.init();
     }
 
     @Override
