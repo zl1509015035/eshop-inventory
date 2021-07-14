@@ -50,7 +50,6 @@ public class ProductInventoryController {
     public ProductInventory getProductInventory(Integer productId) {
         ProductInventory productInventory = null;
 
-
         try {
             Request request = new ProductInventoryCacheRefreshRequest(
                     productId, productInventoryService);
