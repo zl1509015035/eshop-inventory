@@ -1,8 +1,11 @@
 package com.roncoo.eshop.inventory.request;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 请求的内存队列
@@ -11,6 +14,9 @@ public class RequestQueue {
 
     //    内存队列
     private List<ArrayBlockingQueue<Request>> queues = new ArrayList<ArrayBlockingQueue<Request>>();
+
+    //标志位 Map
+    private Map<Integer,Boolean> flagMap = new ConcurrentHashMap<Integer,Boolean>();
 
     /**
      * 单例 饿汉 懒汉
@@ -58,5 +64,9 @@ public class RequestQueue {
      */
     public ArrayBlockingQueue<Request> getQueue(int index){
         return queues.get(index);
+    }
+
+    public Map<Integer,Boolean> getFlagMap(){
+        return flagMap;
     }
 }

@@ -52,7 +52,8 @@ public class ProductInventoryController {
 
         try {
             Request request = new ProductInventoryCacheRefreshRequest(
-                    productId, productInventoryService);
+                    productId, productInventoryService,false);
+            //将请求异布处理，扔进内存队列相应的block队列中
             requestAsyncProcessService.process(request);
 
             //请求扔给service异步处理后，需要wile(true)一会
@@ -73,7 +74,6 @@ public class ProductInventoryController {
                 if (productInventory != null) {
                     return productInventory;
                 }
-
                 //如果没读取到结果,等待一段时间
                 else {
                     Thread.sleep(20);
@@ -84,6 +84,19 @@ public class ProductInventoryController {
             //缓存中读取不到，直接尝试从数据库中读取数据
             productInventory = productInventoryService.findProductInventory(productId);
             if(productInventory != null){
+                //将缓存刷新一下
+                //这个过程中是一个读操作的过程，但是没有放在队列中串行去处理，还是有数据不一致的问题
+//                productInventoryService.setProductInventoryCache(productInventory);
+                request = new ProductInventoryCacheRefreshRequest(
+                        productId, productInventoryService,true);
+
+                requestAsyncProcessService.process(request);
+
+                //代码运行至这里，会有三种情况：
+                //1、上一次也是读请求，数据刷入redis，但LRU清理掉了，标志位还是false
+                //所以此时下一个读请求是从缓存中拿不到数据的，再放一个读Request进队列，让数据去刷新一下
+                //2、可能在200ms内，读请求在队列中一直积压，没等到它执行，所以就直接查一次库，然后给队列里塞进去一个刷新缓存的请求
+                //3、数据库中本身就没有
                 return productInventory;
             }
         } catch (Exception e) {

@@ -1,26 +1,32 @@
 package com.roncoo.eshop.inventory.service.impl;
 
+import com.roncoo.eshop.inventory.request.ProductInventoryCacheRefreshRequest;
+import com.roncoo.eshop.inventory.request.ProductInventoryDBUpdateRequest;
 import com.roncoo.eshop.inventory.request.Request;
 import com.roncoo.eshop.inventory.request.RequestQueue;
 import com.roncoo.eshop.inventory.service.RequestAsyncProcessService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
- * 请求异步处理的service实现
+ * 请求异步处理的service实现，将请求放入相应的内存队列中
  */
 @Service("requestAsyncProcessService")
 public class RequestAsyncProcessServiceImpl implements RequestAsyncProcessService {
+
     @Override
     public void process(Request request) {
-        /**
-         * 做请求的路由，根据每个请求的商品id，路由到对应的内存队里中去
-         */
-        ArrayBlockingQueue<Request> queue = getRoutingQueue(request.getProductId());
 
-        //将请求放入对应队列中，完成路由操作
         try {
+            /**
+             * 做请求的路由，根据每个请求的商品id，路由到对应的内存队里中去
+             * 将请求放入对应队列中，完成路由操作
+             */
+            ArrayBlockingQueue<Request> queue = getRoutingQueue(request.getProductId());
+
             queue.put(request);
         } catch (InterruptedException e) {
             e.printStackTrace();
