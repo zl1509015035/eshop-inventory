@@ -21,11 +21,13 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
     @Override
     public void updateProductInventory(ProductInventory productInventory) {
         productInventoryMapper.updateProductInventory(productInventory);
+        System.out.println("=========日志==========:已修改数据库中的库存=" + productInventory.getProductId()+",商品库存数量="+productInventory.getInventoryCnt());
     }
 
     @Override
     public void removeProductInventoryCache(ProductInventory productInventory) {
         String key = "product:inventory:"+productInventory.getProductId();
+        System.out.println("=========日志==========:删除redis中的缓存，key="+key);
         redisDAO.delete(key);
     }
 

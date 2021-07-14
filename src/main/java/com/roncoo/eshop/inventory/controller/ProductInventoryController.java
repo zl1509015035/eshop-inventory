@@ -16,6 +16,7 @@ import javax.annotation.Resource;
  * 商品库存controller
  */
 @RestController
+
 public class ProductInventoryController {
 
     @Resource
@@ -29,6 +30,10 @@ public class ProductInventoryController {
      */
     @RequestMapping("/updateProductInventory")
     public Response updateProductInventory(ProductInventory productInventory) {
+
+        System.out.println("=========日志==========:接收到更新商品库存的请求，商品id="+productInventory.getProductId()
+                + ",商品库存数量="+productInventory.getInventoryCnt());
+
         Response response = null;
 
         try {

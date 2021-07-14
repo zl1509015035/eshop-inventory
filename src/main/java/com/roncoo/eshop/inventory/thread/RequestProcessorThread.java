@@ -27,6 +27,10 @@ public class RequestProcessorThread implements Callable<Boolean> {
                 //ArrayBlockingQueue
                 //Blocking就是说明，如果队列满了，或者是空的，那么都会在执行操作的时候，阻塞住
                 Request request = queue.take();
+
+                System.out.println("=========日志==========:工作线程处理请求，商品id=" + request.getProductId());
+
+
                 boolean forceRefresh = request.isForceRefresh();
 
                 //先做读请求的去重
