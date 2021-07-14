@@ -53,6 +53,10 @@ public class ProductInventoryController {
      */
     @RequestMapping("/getProductInventory")
     public ProductInventory getProductInventory(Integer productId) {
+
+        System.out.println("=========日志==========:接收一个商品库存的读请求，商品id="+productId);
+
+
         ProductInventory productInventory = null;
 
         try {

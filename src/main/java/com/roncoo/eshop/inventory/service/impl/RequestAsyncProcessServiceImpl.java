@@ -77,7 +77,7 @@ public class RequestAsyncProcessServiceImpl implements RequestAsyncProcessServic
         //对hash值进行取模，将hash值路由到指定的内存队中
         int index = (requestQueue.queueSize() - 1) & hash;
 
-        System.out.println("=========日志==========:路由内存对垒，商品id=" + productId + ",队列索引=" + index);
+        System.out.println("=========日志==========:路由内存队列，商品id=" + productId + ",队列索引=" + index);
         return requestQueue.getQueue(index);
     }
 }
