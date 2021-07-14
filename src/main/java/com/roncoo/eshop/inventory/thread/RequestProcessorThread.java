@@ -23,6 +23,8 @@ public class RequestProcessorThread implements Callable<Boolean> {
                 //ArrayBlockingQueue
                 //Blocking就是说明，如果队列满了，或者是空的，那么都会在执行操作的时候，阻塞住
                 Request request = queue.take();
+                //执行这个request操作
+                request.process();
             }
         }catch (Exception e){
             e.printStackTrace();

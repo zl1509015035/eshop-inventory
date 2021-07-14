@@ -20,7 +20,11 @@ public class RequestAsyncProcessServiceImpl implements RequestAsyncProcessServic
         ArrayBlockingQueue<Request> queue = getRoutingQueue(request.getProductId());
 
         //将请求放入对应队列中，完成路由操作
-        queue.add(request);
+        try {
+            queue.put(request);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

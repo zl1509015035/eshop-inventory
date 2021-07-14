@@ -39,4 +39,23 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
         String key = "product:inventory:"+productInventory.getProductId();
         redisDAO.set(key,String.valueOf(productInventory.getInventoryCnt()));
     }
+
+    @Override
+    public ProductInventory getProductInventoryCache(Integer productId) {
+        Long inventoryCnt = 0L;
+
+        String key = "product:inventory:"+productId;
+        String result = redisDAO.get(key);
+        //如果读到了，放进缓存
+        if(null != result && !"".equals(result)){
+            try{
+                inventoryCnt = Long.valueOf(result);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return new ProductInventory(productId,inventoryCnt);
+        }
+        //如果没读到，返回null
+        return null;
+    }
 }

@@ -32,5 +32,12 @@ public interface ProductInventoryService {
      */
     void setProductInventoryCache(ProductInventory productInventoryCache);
 
+    /**
+     * 获取商品库存的缓存
+     * @param productId
+     * @return
+     */
+    ProductInventory getProductInventoryCache(Integer productId);
+
 
 }
