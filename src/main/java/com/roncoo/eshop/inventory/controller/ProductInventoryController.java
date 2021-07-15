@@ -14,9 +14,19 @@ import javax.annotation.Resource;
 
 /**
  * 商品库存controller
+ *
+ *场景：
+ * （1）一个更新商品库存的请求过来，然后此时会先删除redis中的缓存，然后模拟卡顿5秒钟
+ * （2）在这个卡顿的5秒钟内，我们发送一个商品缓存的读请求，因为此时redis中没有缓存，就会来请求将数据库中最新数据刷新到缓存中
+ * （3）此时读请求会路由到同一个内存队列中，阻塞住，不会执行
+ * （4）等5秒后，写请求完成了数据库的更新之后，读请求才会执行
+ * （5）读请求执行的时候，会将最新的库存从数据库中查询出来，然后更新到缓存中
+ *
+ * 如果是不一致的情况，可能出现在redis中库存还是100，但数据库中也许已经是99了
+ *
+ * 现在做了一致性保障方案后，就可以保障数据时一致的
  */
 @RestController
-
 public class ProductInventoryController {
 
     @Resource
@@ -73,6 +83,8 @@ public class ProductInventoryController {
 
             while (true) {
 
+                System.out.println("=========日志==========:waitTime="+waitTime);
+
                 if (waitTime > 200) {
                     break;
                 }
@@ -81,6 +93,7 @@ public class ProductInventoryController {
 
                 //如果读取到结果,返回
                 if (productInventory != null) {
+                    System.out.println("=========日志==========:在200毫秒内读到了缓存,商品id=" + productInventory.getProductId()+",商品库存数量="+productInventory.getInventoryCnt());
                     return productInventory;
                 }
                 //如果没读取到结果,等待一段时间

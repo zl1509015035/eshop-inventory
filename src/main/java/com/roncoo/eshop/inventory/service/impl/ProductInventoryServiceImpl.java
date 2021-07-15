@@ -21,14 +21,14 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
     @Override
     public void updateProductInventory(ProductInventory productInventory) {
         productInventoryMapper.updateProductInventory(productInventory);
-        System.out.println("=========日志==========:已修改数据库中的库存=" + productInventory.getProductId()+",商品库存数量="+productInventory.getInventoryCnt());
+        System.out.println("=========日志==========:已修改数据库中的库存,商品id=" + productInventory.getProductId()+",商品库存数量="+productInventory.getInventoryCnt());
     }
 
     @Override
     public void removeProductInventoryCache(ProductInventory productInventory) {
         String key = "product:inventory:"+productInventory.getProductId();
-        System.out.println("=========日志==========:删除redis中的缓存，key="+key);
         redisDAO.delete(key);
+        System.out.println("=========日志==========:删除redis中的缓存，key="+key);
     }
 
     @Override
@@ -40,6 +40,8 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
     public void setProductInventoryCache(ProductInventory productInventory) {
         String key = "product:inventory:"+productInventory.getProductId();
         redisDAO.set(key,String.valueOf(productInventory.getInventoryCnt()));
+        System.out.println("=========日志==========:已更新商品库存的缓存,商品id=" + productInventory.getProductId()+",商品库存数量="+productInventory.getInventoryCnt());
+
     }
 
     @Override
@@ -52,10 +54,10 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
         if(null != result && !"".equals(result)){
             try{
                 inventoryCnt = Long.valueOf(result);
+                return new ProductInventory(productId,inventoryCnt);
             }catch (Exception e){
                 e.printStackTrace();
             }
-            return new ProductInventory(productId,inventoryCnt);
         }
         //如果没读到，返回null
         return null;

@@ -66,7 +66,7 @@ public class RequestProcessorThread implements Callable<Boolean> {
 
                 }
 
-
+                System.out.println("===========日志===========: 工作线程处理请求，商品id=" + request.getProductId());
                 //执行这个request操作
                 request.process();
 

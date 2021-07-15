@@ -40,11 +40,11 @@ public class ProductInventoryDBUpdateRequest implements Request {
         System.out.println("=========日志==========:已删除redis中的缓存");
 
         //为了模拟演示，先删除了redis的缓存，然后还没更新数据库的时候，可以人工sleep一下
-        try {
+/*        try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
         // 修改数据库中的库存
         productInventoryService.updateProductInventory(productInventory);
     }
