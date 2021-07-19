@@ -1,4 +1,4 @@
-package com.example.redisdemo140.list;
+package com.example.redisdemo140.demo.list;
 
 import redis.clients.jedis.Jedis;
 
@@ -13,6 +13,11 @@ import redis.clients.jedis.Jedis;
  * rpop list
  */
 public class Test {
-    private Jedis jedis = new Jedis("192.168.1.10", 6379);
 
+    public static void main(String[] args) {
+         Jedis jedis = new Jedis("127.0.0.1", 6379);
+
+        String ping = jedis.ping();
+        System.out.println(ping);
+    }
 }
