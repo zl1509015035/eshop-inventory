@@ -19,14 +19,18 @@ public class MicroBlogDemo {
         demo.flushDB();
 
         //定义用户id
-        long userId = 1;
-        long friendId = 2;
-        long superStarId = 3;
+        long userId = 31;
+        long friendId = 32;
+        long superStarId = 33;
+        long classmateId = 34;
+        long motherId = 35;
 
         //定义关注的关系链
         demo.follow(userId, friendId);
+        demo.follow(userId, motherId);
         demo.follow(userId, superStarId);
         demo.follow(friendId, superStarId);
+        demo.follow(friendId, classmateId);
 
         //明星看看自己被谁关注了
         Set<String> superStarFollowers = demo.getFollowers(superStarId);
@@ -42,14 +46,21 @@ public class MicroBlogDemo {
 
 
         System.out.println("朋友被哪些人关注了:" + friendFollowers + ",关注自己的人数为:" + friendFollowersCount
-        +"朋友关注了哪些人:"+friendFollowerUsers+",关注了多少人:"+friendFollowerUsersCount);
+                + ",朋友关注了哪些人:" + friendFollowerUsers + ",关注了多少人:" + friendFollowerUsersCount);
 
         //查看我自己关注了多少人
         Set<String> myFollowUsers = demo.getFollowerUsers(userId);
         long myFollowUsersCount = demo.getFollowerUsersCount(userId);
-        System.out.println("我关注了哪些人:"+myFollowUsers+",我关注的人数是:"+myFollowUsersCount);
+        System.out.println("我关注了哪些人:" + myFollowUsers + ",我关注的人数是:" + myFollowUsersCount);
 
 
+        //获取我和好友共同关注的好友
+        Set<String> sameFollowUsers = demo.getSameFollowUsers(userId, friendId);
+        System.out.println("我和好友共同关注的用户:" + sameFollowUsers);
+
+        //获取推荐给我的可关注的人，我关注的人关注了的其他人，是我没关注过的人
+        Set<String> recommendFollowUsers = demo.getRecommendFollowUsers(userId, friendId);
+        System.out.println("推荐给我的关注的人有哪些:" + recommendFollowUsers);
     }
 
     /**
@@ -109,9 +120,36 @@ public class MicroBlogDemo {
     }
 
     /**
+     * 获取用户和其他用户共同关注的人有哪些
+     *
+     * @param userId
+     * @param otherUserId
+     * @return
+     */
+    public Set<String> getSameFollowUsers(long userId, long otherUserId) {
+        return jedis.sinter("user::" + userId + "::follow_users", "user::" + otherUserId + "::follow_users");
+    }
+
+    /**
+     * 获取给我推荐的可关注人
+     * 我关注的某个好友关注的一些人，但我没关注，此时推荐给我
+     *
+     * @param userId
+     * @return
+     */
+    public Set<String> getRecommendFollowUsers(long userId, long otherUserId) {
+        //获取差集
+        return jedis.sdiff("user::" + otherUserId + "::follow_users",
+                "user::" + userId + "::follow_users"
+        );
+    }
+
+    /**
      * 查看自己关注了多少人
      */
     public long getFollowerUsersCount(long userId) {
         return jedis.scard("user::" + userId + "::follow_users");
     }
+
+
 }
