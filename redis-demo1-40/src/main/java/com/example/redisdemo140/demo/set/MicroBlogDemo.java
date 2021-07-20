@@ -134,6 +134,7 @@ public class MicroBlogDemo {
      * 获取给我推荐的可关注人
      * 我关注的某个好友关注的一些人，但我没关注，此时推荐给我
      *
+     * sdiff s1 s2 ，取s1里有，但s2里没有的
      * @param userId
      * @return
      */
