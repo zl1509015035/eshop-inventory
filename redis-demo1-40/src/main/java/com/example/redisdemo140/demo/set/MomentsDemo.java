@@ -47,7 +47,6 @@ public class MomentsDemo {
 
     /**
      * 对朋友圈进行点赞
-     *
      * @param userId   朋友的id
      * @param momentId 朋友圈的id
      */
@@ -57,7 +56,6 @@ public class MomentsDemo {
 
     /**
      * 对朋友圈取消点赞
-     *
      * @param userId
      * @param momentId
      */
@@ -67,7 +65,6 @@ public class MomentsDemo {
 
     /**
      * 查看自己是否对某条朋友圈点赞过
-     *
      * @param userId
      * @param momentId
      * @return
