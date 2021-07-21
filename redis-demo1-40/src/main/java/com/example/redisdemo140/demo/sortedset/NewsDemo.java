@@ -3,7 +3,6 @@ package com.example.redisdemo140.demo.sortedset;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Tuple;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
